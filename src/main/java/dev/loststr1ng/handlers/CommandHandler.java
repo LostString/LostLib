@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CommandHandler implements CommandExecutor, TabCompleter {
+public class CommandHandler {
 
     private final Plugin plugin;
     private final LostLib lib;
@@ -68,64 +68,18 @@ public class CommandHandler implements CommandExecutor, TabCompleter {
         for(String cmd : commands.keySet()){
             registerCommand(commands.get(cmd));
         }
-        handle();
     }
 
     public void registerCommand(CustomCommand customCommand){
-        LBCommand lbCommand = new LBCommand(customCommand.name(), customCommand.description(), customCommand.usage(), customCommand.aliases());
+        LBCommand lbCommand = new LBCommand(customCommand);
         CommandMap commandMap = getCommandMap();
         if(commandMap == null) return;
         commandMap.register(plugin.getName(), lbCommand);
     }
 
-    public void handle(){
-        CommandMap commandMap = getCommandMap();
-        if(commandMap == null) return;
-        for(String cmd : commands.keySet()){
-            PluginCommand pluginCommand = plugin.getServer().getPluginCommand(cmd);
-            if(pluginCommand == null) return;
-            pluginCommand.setExecutor(this);
-            pluginCommand.setTabCompleter(this);
-        }
-    }
 
     public CustomCommand getCommand(@NotNull String name){
         return commands.get(name);
     }
 
-    @Override
-    public boolean onCommand(@NotNull CommandSender sender, Command command, @NotNull String s, String[] args) {
-        String commandName = command.getName();
-        if(commands.containsKey(commandName)){
-            CustomCommand customCommand = getCommand(commandName);
-            Messages messages = lib.getMessages();
-            if(messages == null) return false;
-            if(customCommand == null) return false;
-            if(customCommand.playerOnly() && !(sender instanceof Player)){
-                messages.sendMessage(sender, messages.getPlayerOnly(), true);
-            }
-            if(customCommand.permission() != null){
-                if(sender.hasPermission(customCommand.permission())){
-                    customCommand.execute(sender, command, s, args);
-                    return true;
-                }else {
-                    messages.sendMessage(sender, messages.getNoPermission(), true);
-                }
-            }else {
-                customCommand.execute(sender, command, s, args);
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, String[] args) {
-        String cmdName = command.getName();
-        if(commands.containsKey(cmdName)){
-            CustomCommand customCommand = getCommand(cmdName);
-            if(customCommand == null) return List.of();
-            return customCommand.tabComplete(sender, command, s, args);
-        }
-        return List.of();
-    }
 }

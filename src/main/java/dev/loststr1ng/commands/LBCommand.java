@@ -8,12 +8,22 @@ import java.util.List;
 
 public class LBCommand extends BukkitCommand {
 
-    public LBCommand(String name, String description, String usage, List<String> aliases) {
-        super(name, description, usage, aliases);
+    private CustomCommand command;
+
+    public LBCommand(CustomCommand command) {
+        super(command.name(), command.description(), command.usage(), command.aliases());
+        this.command = command;
     }
 
     @Override
-    public boolean execute(@NotNull CommandSender commandSender, String s, String[] strings) {
+    public boolean execute(@NotNull CommandSender sender, @NotNull String label, String[] args) {
+        command.execute(sender, label, args);
         return true;
+    }
+
+    @Override
+    public @NotNull List<String> tabComplete(@NotNull CommandSender sender, @NotNull String label, String[] args){
+        command.tabComplete(sender, label, args);
+        return List.of();
     }
 }

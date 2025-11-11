@@ -46,19 +46,17 @@ public interface CustomCommand {
     /**
      * The execute method of the command
      * @param sender who executed te command
-     * @param command command
      * @param label command name
      * @param args args in the command
      */
-    public void execute(CommandSender sender, Command command, String label, String[] args);
+    public void execute(CommandSender sender, String label, String[] args);
 
     /**
      * The tab completer method of the command
      * @param sender who is executing te command
-     * @param command command
      * @param label command name
      * @param args args
      * @return The tab complete list
      */
-    public List<String> tabComplete(CommandSender sender, Command command, String label, String[] args);
+    public List<String> tabComplete(CommandSender sender, String label, String[] args);
 }
