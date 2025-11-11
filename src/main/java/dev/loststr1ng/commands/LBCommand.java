@@ -28,12 +28,10 @@ public class LBCommand extends BukkitCommand {
             return true;
         }
         if(command.permission() != null && !command.permission().isEmpty()){
-            if(sender.hasPermission(command.permission())){
+            if(!(sender.hasPermission(command.permission()))){
                 lib.getMessages().sendMessage(sender, lib.getMessages().getNoPermission(), true);
                 return true;
             }
-            command.execute(sender, label, args);
-            return true;
         }
         if(args.length >= 1){
             SubCommandBase subCommand = command.getSubCommand(args[0]);
@@ -46,11 +44,12 @@ public class LBCommand extends BukkitCommand {
         }
         command.execute(sender, label, args);
         return true;
+
     }
 
     @Override
     public @NotNull List<String> tabComplete(@NotNull CommandSender sender, @NotNull String label, String[] args){
-        if(args.length == 0){
+        if(args.length == 1){
             // return sub commands and custom completers
             List<String> completer = command.tabComplete(sender, label, args);
             completer.addAll(command.subCommandBaseMap.keySet());
