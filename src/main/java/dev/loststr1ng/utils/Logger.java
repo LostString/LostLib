@@ -23,10 +23,12 @@ public class Logger {
         sendLog("ERROR", message, "red");
     }
 
+    public void debug(String message){ sendLog("DEBUG", message, "green");}
+
     private void sendLog(String level, String message, String color){
         lostLib.getPlugin().getServer()
                 .getConsoleSender()
-                .sendMessage(MiniMessage.miniMessage().deserialize("<"+color+">[" + level+ "] " + message));
+                .sendMessage(MiniMessage.miniMessage().deserialize("<"+color+">[" +lostLib.getPlugin().getName().toUpperCase()+" - "+ level+ "]: " + message));
     }
 
 }

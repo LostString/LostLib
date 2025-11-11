@@ -93,7 +93,9 @@ public class Messages {
     public void sendMessage(CommandSender sender, String message, boolean prefixed){
         Component colored = getColored(message);
         if(prefixed){
-            sender.sendMessage(prefix + colored);
+            colored = getColored(prefix + message);
+            sender.sendMessage(colored);
+            return;
         }else {
             sender.sendMessage(colored);
         }

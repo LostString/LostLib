@@ -1,62 +1,24 @@
 package dev.loststr1ng.commands;
 
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public interface CustomCommand {
+public abstract class CustomCommand implements CommandBase {
 
-    /**
-     * Get command name
-     * @return command name
-     */
-    public String name();
+    public final Map<String,SubCommandBase> subCommandBaseMap;
 
-    /**
-     * Get command description
-     * @return description
-     */
-    public String description();
+    public CustomCommand() {
+        this.subCommandBaseMap = new HashMap<>();
+    }
 
-    /**
-     * Get command usage
-     * @return usage message
-     */
-    public String usage();
+    public void addSubCommand(SubCommandBase subCommandBase){
+        subCommandBaseMap.put(subCommandBase.name(), subCommandBase);
+    }
 
-    /**
-     * Get command aliases
-     * @return command aliases
-     */
-    public List<String> aliases();
-
-    /**
-     * Get the required permission to execute this command
-     * @return command permission
-     */
-    public String permission();
-
-    /**
-     * Can only player execute this command
-     * @return if only player can execute
-     */
-    public boolean playerOnly();
-
-    /**
-     * The execute method of the command
-     * @param sender who executed te command
-     * @param label command name
-     * @param args args in the command
-     */
-    public void execute(CommandSender sender, String label, String[] args);
-
-    /**
-     * The tab completer method of the command
-     * @param sender who is executing te command
-     * @param label command name
-     * @param args args
-     * @return The tab complete list
-     */
-    public List<String> tabComplete(CommandSender sender, String label, String[] args);
+    public SubCommandBase getSubCommand(String name){
+        return subCommandBaseMap.get(name);
+    }
 }
